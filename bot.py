@@ -55,7 +55,7 @@ class ClassBot:
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Обработчик команды /help"""
         help_text = (
-            "📖 Помощь по командам бота v1.2:\n\n"
+            "📖 Помощь по командам бота v1.2.3:\n\n"
             "Для всех:\n"
             "/get_hw - получить домашнее задание\n"
             "/get_ready_hw - получить готовое домашнее задание\n"
@@ -67,7 +67,8 @@ class ClassBot:
             "/set_duty @user1 @user2 - установить дежурных\n"
             "/post_schedule [текст] - установить расписание\n"
             "/get_chat_log - получить лог чата\n"
-            "https://nash10Aklacc.ru/ - наш сайт, список изменений бота\n"
+            "https://nash10Aklacc.ru/ - наш сайт, список изменений бота (1.10.25)\n"
+            "/generate [промпт] (в 2.1 версии)\n"
             "/get_user_log @user - получить лог пользователя\n\n"
         )
         await update.message.reply_text(help_text)
@@ -102,7 +103,7 @@ class ClassBot:
 
 # ---------------------------------------------------------------------------------------------
     async def post_ready_hw(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Установка домашнего задания"""
+        """Установка готового домашнего задания"""
         if not await self.is_admin(update, context):
             await update.message.reply_text("❌ Эта команда только для администраторов!")
             return
@@ -114,18 +115,17 @@ class ClassBot:
         ready_homework_text = ' '.join(context.args)
         chat_id = update.effective_chat.id
 
-        db.save_homework(chat_id, ready_homework_text)
+        db.save_ready_homework(chat_id, ready_homework_text)  # исправлено
         await update.message.reply_text("✅ Готовое домашнее задание сохранено!")
 
     async def get_ready_hw(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Получение домашнего задания"""
+        """Получение готового домашнего задания"""
         chat_id = update.effective_chat.id
         ready_homework = db.get_ready_homework(chat_id)
-
         if ready_homework:
-            await update.message.reply_text(f"📚 Домашнее задание:\n\n{ready_homework}")
+            await update.message.reply_text(f"📖 Готовое домашнее задание:\n{ready_homework}")
         else:
-            await update.message.reply_text("📚 Домашнего задания нет.")
+            await update.message.reply_text("❌ Готовое домашнее задание пока не задано.")
 
     # Duty functions
     async def set_duty(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -331,6 +331,8 @@ class ClassBot:
         self.application.add_handler(CommandHandler("schedule", self.schedule))
         self.application.add_handler(CommandHandler("get_chat_log", self.get_chat_log))
         self.application.add_handler(CommandHandler("get_user_log", self.get_user_log))
+        self.application.add_handler(CommandHandler("post_ready_hw", self.post_ready_hw))
+        self.application.add_handler(CommandHandler("get_ready_hw", self.get_ready_hw))
         self.application.add_handler(MessageHandler(filters.ALL & ~filters.COMMAND, self.archive_message))
         self.application.add_error_handler(self.error_handler)
 

@@ -41,23 +41,23 @@ class Database:
                        ''')
         # Таблица для домашних заданий
         cursor.execute('''
-                               CREATE TABLE IF NOT EXISTS ready_homework
-                               (
-                                   id
-                                   INTEGER
-                                   PRIMARY
-                                   KEY
-                                   AUTOINCREMENT,
-                                   chat_id
-                                   INTEGER,
-                                   text
-                                   TEXT,
-                                   created_at
-                                   TIMESTAMP
-                                   DEFAULT
-                                   CURRENT_TIMESTAMP
-                               )
-                               ''')
+                        CREATE TABLE IF NOT EXISTS ready_homework
+                        (
+                        id
+                        INTEGER
+                        PRIMARY
+                        KEY
+                        AUTOINCREMENT,
+                        chat_id
+                        INTEGER,
+                        text
+                        TEXT,
+                        created_at
+                        TIMESTAMP
+                        DEFAULT
+                        CURRENT_TIMESTAMP
+                        )
+                        ''')
 
         # Таблица для дежурных
         cursor.execute('''
@@ -264,6 +264,7 @@ class Database:
         result = cursor.fetchone()
         conn.close()
         return result[0] if result else None
+
 
     # Duty methods
     def save_duty(self, chat_id: int, user1_id: int, user1_name: str, user2_id: int, user2_name: str):
