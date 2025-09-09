@@ -116,15 +116,15 @@ class ClassBot:
         db.save_homework(chat_id, ready_homework_text)
         await update.message.reply_text("✅ Готовое домашнее задание сохранено!")
 
-    async def get_hw(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def get_ready_hw(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Получение домашнего задания"""
         chat_id = update.effective_chat.id
         ready_homework = db.get_ready_homework(chat_id)
 
         if ready_homework:
-            await update.message.reply_text(f"📚 Готовое домашнее задание:\n\n{ready_homework}")
+            await update.message.reply_text(f"📚 Домашнее задание:\n\n{ready_homework}")
         else:
-            await update.message.reply_text("📚 Готового домашнего задания нет.")
+            await update.message.reply_text("📚 Домашнего задания нет.")
 
     # Duty functions
     async def set_duty(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
