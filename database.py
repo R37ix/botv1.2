@@ -289,7 +289,7 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO time (chat_id, text) VALUES (?, ?)",
+            "INSERT INTO t_schedule (chat_id, text) VALUES (?, ?)",
             (chat_id, text)
         )
         conn.commit()
@@ -299,7 +299,7 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT text FROM time WHERE chat_id = ? ORDER BY created_at DESC LIMIT 1",
+            "SELECT text FROM t_schedule WHERE chat_id = ? ORDER BY created_at DESC LIMIT 1",
             (chat_id,)
         )
         result = cursor.fetchone()
